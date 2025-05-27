@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+pymongo
+python-multipart # For file uploads
+
+# Add your AI model specific libraries here, e.g.:
+# tensorflow
+# Pillow (for PIL)
+# numpy 
