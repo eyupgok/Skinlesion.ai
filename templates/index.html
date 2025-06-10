@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cilt Hastalığı Tespiti</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cilt Lezyonu Görüntüsü Yükleyin</h1>
+        <p>Modelin tahmin edebileceği hastalıklar: Aktinik keratoz, Bazal hücreli karsinom, İyi huylu keratoz, Dermatofibrom, Melanositik nevüs, Piyojenik granülomlar, Melanom.</p>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">Tahmin Et</button>
+        </form>
+        {% if prediction %}
+        <div class="result">
+            <h2>Tahmin Sonucu</h2>
+            <p><strong>Tespit Edilen Hastalık:</strong> {{ prediction }}</p>
+            {% if image_file %}
+            <img src="{{ url_for('static', filename='uploads/' + image_file) }}" alt="Yüklenen Görüntü">
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        {% if predictions %}
+        <div class="history">
+            <h2>Geçmiş Tahminler</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Görüntü</th>
+                        <th>Tahmin</th>
+                        <th>Tarih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td><img src="{{ url_for('static', filename='uploads/' + p.dosya_adi) }}" alt="tahmin görüntüsü" class="thumbnail"></td>
+                        <td>{{ p.tahmin }}</td>
+                        <td>{{ p.tarih.strftime('%Y-%m-%d %H:%M:%S') }} UTC</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html> 
